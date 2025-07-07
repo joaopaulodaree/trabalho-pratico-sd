@@ -1,11 +1,11 @@
 from fastapi import APIRouter
-from .service import analyze_profile
-from .models import FitnessProfile
+from models import FitnessProfile
+from service import analyze_profile
 
-# Roteador para endpoints de fitness
+
 router = APIRouter()
 
-@router.post("/analyze")
-async def analyze_fitness(fitness_profile: FitnessProfile):
-    return await analyze_profile(fitness_profile)
 
+@router.post("/analisar")
+async def analisar_fitness(perfil_fitness: FitnessProfile):
+    return await analyze_profile(perfil_fitness)

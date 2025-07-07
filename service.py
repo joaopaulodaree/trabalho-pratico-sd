@@ -1,37 +1,40 @@
-from pydantic_ai.agent import Agent, RunContext
-from .models import PerfilFitness, ResultadoRelatorioFitness
-from pydantic_ai.models.openai import OpenAIModel
-from pydantic_ai.providers.openai import OpenAIProvider
+from pydantic_ai import Agent, RunContext
+from models import FitnessProfile, FitnessReportResult
+from pydantic_ai.providers.groq import GroqProvider
+from dotenv import load_dotenv
+import os
 
-# Agente principal para análise fitness
-agente_fitness = Agent(
-    'llama3.2',
-    api_base="http://localhost:11434/v1",
-    deps_type=PerfilFitness,
-    output_type=ResultadoRelatorioFitness,
+load_dotenv()
+
+provider = GroqProvider(api_key=os.getenv("GROQ_API_KEY"))
+
+fitness_agent = Agent(
+    'groq:llama-3.3-70b-versatile',
+    deps_type=FitnessProfile,
+    output_type=FitnessReportResult,
     output_retries=3,
-    system_prompt="Crie um ResultadoRelatorioFitness personalizado baseado no PerfilFitness fornecido. O relatório deve incluir um plano de treino detalhado, plano alimentar, ingestão calórica diária, distribuição de macronutrientes e outras informações relevantes para ajudar o usuário a alcançar seus objetivos fitness."
-    "Para frases motivacionais, chame a ferramenta obter_motivacao e escolha a melhor frase da lista que você receber"
+    system_prompt="Crie um FitnessReportResult personalizado com base nas informações fornecidas pelo usuário. "
+    "Para frases motivacionais, chame a ferramenta get_motivation e escolha a melhor frase da lista recebida."
 )
 
-# Agente para gerar frases motivacionais
-agente_motivacional = Agent(
-    'mistral',
-    api_base="http://localhost:11434/v1",
+motivational_agent = Agent(
+    'groq:llama-3.3-70b-versatile',  
     output_type=list[str],
-    system_prompt="Você é um gerador de frases motivacionais. Sua tarefa é fornecer uma lista de frases motivacionais que podem inspirar e encorajar indivíduos em sua jornada fitness. Cada frase deve ser única e inspiradora, baseada nos objetivos fitness e status atual do usuário.",
+    system_prompt="Forneça frases motivacionais baseadas nos objetivos fitness e status atual do usuário.",
 )
 
-@agente_fitness.system_prompt
-async def adicionar_dados_fitness_usuario(ctx: RunContext[PerfilFitness]) -> str:
-    dados_fitness = ctx.deps
-    return f"Perfil e objetivos do usuário: {dados_fitness!r}"
+@fitness_agent.system_prompt
+async def add_user_fitness_data(ctx: RunContext[FitnessProfile]) -> str:
+    fitness_data = ctx.deps
+    return f"Perfil e objetivos do usuário: {fitness_data!r}"
 
-@agente_fitness.tool
-async def obter_motivacao(ctx: RunContext[PerfilFitness]) -> list[str]:
-    return await agente_motivacional.run(
-        f"Por favor, gere 5 frases motivacionais sobre treinar e comer de forma saudável.")
 
-async def analisar_perfil(perfil_fitness: PerfilFitness):
-    resultado = await agente_fitness.run("Crie um relatório fitness personalizado baseado no perfil fornecido.")
-    return resultado.output
+@fitness_agent.tool
+async def get_motivation(ctx: RunContext) -> list[str]:
+    return await motivational_agent.run(
+        f"Por favor, gere 5 frases motivacionais sobre treinar e se alimentar de forma saudável.")
+    
+    
+async def analyze_profile(profile: FitnessProfile) -> FitnessReportResult:
+    result = await fitness_agent.run("Crie um plano personalizado de treino e nutrição.", deps=profile)
+    return result.data
