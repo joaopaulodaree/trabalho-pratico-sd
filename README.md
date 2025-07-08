@@ -151,7 +151,7 @@ fitness-advisor/
 
 ### Customização de Planos
 - **Preferências alimentares**: Vegetariano, vegano, sem glúten
-- **Restrições médicas**: Diabetes, hipertensão, etc.
+- **Restrições físicas**: Lesões físicas
 - **Equipamentos disponíveis**: Halteres, elasticos, etc.
 
 ### Exportação de Dados
