@@ -1,5 +1,5 @@
 from pydantic_ai import Agent, RunContext
-from models import FitnessProfile, FitnessReportResult
+from app.models import FitnessProfile, FitnessReportResult
 from pydantic_ai.providers.groq import GroqProvider
 from dotenv import load_dotenv
 import os
@@ -26,6 +26,7 @@ motivational_agent = Agent(
     system_prompt="Give motivational quotes based on the user's fitness goals and current status.",
 )
 
+
 @fitness_agent.system_prompt
 async def add_user_fitness_data(ctx: RunContext[FitnessProfile]) -> str:
     fitness_data = ctx.deps
@@ -36,11 +37,3 @@ async def add_user_fitness_data(ctx: RunContext[FitnessProfile]) -> str:
 async def get_motivation(ctx: RunContext) -> list[str]:
     return await motivational_agent.run(
         f"Please generate 5 motivational quotes about working out and eating healthy.")
-    
-    
-async def analyze_profile(profile: FitnessProfile) -> FitnessReportResult:
-    result = await fitness_agent.run(
-        "Create a personalized fitness and nutrition plan. The meal_plan must be a list of meals, each with name, ingredients, portions, and timing.",
-        deps=profile
-    )
-    return result.data

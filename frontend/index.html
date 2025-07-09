@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fitness Profile</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/static/style.css" />
+
 </head>
+
 <body>
   <div class="container">
     <h1>Fitness Profile</h1>
     <p class="subtitle">Tell us about yourself to create your personalized plan</p>
-    
+
     <form id="fitnessForm">
       <div class="form-section">
         <h3>Basic Information</h3>
@@ -28,7 +31,7 @@
             </select>
           </div>
         </div>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="weight">Weight (kg)</label>
@@ -86,10 +89,11 @@
             <input type="number" id="workout_days_per_week" name="workout_days_per_week" min="1" max="7" required />
           </div>
         </div>
-        
+
         <div class="form-group">
           <label for="available_equipment">Available Equipment</label>
-          <input type="text" id="available_equipment" name="available_equipment" placeholder="e.g. dumbbells, barbell, bodyweight only" />
+          <input type="text" id="available_equipment" name="available_equipment"
+            placeholder="e.g. dumbbells, barbell, bodyweight only" />
         </div>
       </div>
 
@@ -97,9 +101,10 @@
         <h3>Health & Restrictions</h3>
         <div class="form-group">
           <label for="dietary_restrictions">Dietary Restrictions</label>
-          <input type="text" id="dietary_restrictions" name="dietary_restrictions" placeholder="e.g. lactose intolerant, vegetarian, gluten-free" />
+          <input type="text" id="dietary_restrictions" name="dietary_restrictions"
+            placeholder="e.g. lactose intolerant, vegetarian, gluten-free" />
         </div>
-        
+
         <div class="form-group">
           <label for="injuries">Injuries or Limitations</label>
           <input type="text" id="injuries" name="injuries" placeholder="e.g. knee injury, lower back issues" />
@@ -108,11 +113,12 @@
 
       <button type="submit">Create My Profile</button>
     </form>
-    
+
     <div id="output"></div>
     <div id="formattedOutput"></div>
   </div>
-  
-  <script src="script.js"></script>
+
+  <script src="/static/script.js"></script>
 </body>
+
 </html>

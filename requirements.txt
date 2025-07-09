@@ -4,3 +4,4 @@ pydantic
 pydantic-ai
 httpx
 python-dotenv
+ollama

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from models import FitnessProfile
-from fitness_agent_service import analyze_profile
+from app.models import FitnessProfile
+from app.fitness_agent_service import analyze_profile
 
 
 router = APIRouter()
